@@ -1,5 +1,9 @@
 ---@diagnostic disable: deprecated, undefined-field, lowercase-global, undefined-global, need-check-nil
 
+----------------------------------------
+                 --E--
+----------------------------------------
+
 local menus = {}
 local functions = {}
 
