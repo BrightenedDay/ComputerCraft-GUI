@@ -1,5 +1,7 @@
 # ComputerCraft GUI
 
+Tutorial and gui functions can be found here:
+
 [Wiki](https://github.com/BrightenedDay/ComputerCraft-GUI/wiki)
 
 # Installation
