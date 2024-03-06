@@ -161,7 +161,7 @@ function createPanelFromCenter(menuIndex, BGColor, posX, posY, left, right, up, 
     end
 end
 
-function createTextbox(menuIndex, length, BGColor, textColor, placeholder, placeholderColor, posX, posY)
+function createTextbox(menuIndex, length, BGColor, textColor, placeholder, placeholderColor, border, posX, posY)
     local index = #menus[menuIndex] + 1
 
     menus[menuIndex][index] = {}
@@ -171,6 +171,7 @@ function createTextbox(menuIndex, length, BGColor, textColor, placeholder, place
     menus[menuIndex][index].length = length
     menus[menuIndex][index].text = ""
     menus[menuIndex][index].textColor = textColor
+    menus[menuIndex][index].border = border
     menus[menuIndex][index].placeholder = placeholder
     menus[menuIndex][index].placeholderColor = placeholderColor
     menus[menuIndex][index].BGColor = BGColor
@@ -281,7 +282,13 @@ function drawUI()
 
                 ref.endX = ref.posX + 2
                 term.setBackgroundColor(ref.BGColor)
-                paintutils.drawFilledBox(ref.posX - ref.length / 2, ref.posY - 1, ref.endX + ref.length / 2, ref.posY + 1, ref.BGColor)
+                
+                if ref.border then
+                    paintutils.drawFilledBox(ref.posX - ref.length / 2, ref.posY - 1, ref.endX + ref.length / 2, ref.posY + 1, ref.BGColor)
+                else
+                    paintutils.drawFilledBox(ref.posX - ref.length / 2, ref.posY, ref.endX + ref.length / 2, ref.posY, ref.BGColor)
+                end
+
                 term.setCursorPos(ref.posX - ref.length / 2, ref.posY)
                 
                 if boxFocus ~= ref and #ref.text == 0 then
@@ -370,8 +377,14 @@ function clickedMouse(x, y)
                 end
             end
         elseif ref.is == 3 then
+            local addition = 0
+
+            if ref.border then
+                addition = 1
+            end
+
             if #ref.text % 2 == 0 then
-                if x >= ref.posX - 1 - ref.length / 2 and x < ref.endX + 1 + ref.length / 2 and y >= ref.posY - 1 and y <= ref.posY + 1 then
+                if x >= ref.posX - 1 - ref.length / 2 and x < ref.endX + 1 + ref.length / 2 and y >= ref.posY - addition and y <= ref.posY + addition then
                     boxFocus = ref
                     drawUpdate = true
                     return
@@ -381,7 +394,7 @@ function clickedMouse(x, y)
                     return
                 end
             else
-                if x >= ref.posX - ref.length / 2 and x < ref.endX + ref.length / 2 and y >= ref.posY - 1 and y <= ref.posY + 1 then
+                if x >= ref.posX - ref.length / 2 and x < ref.endX + ref.length / 2 and y >= ref.posY - addition and y <= ref.posY + addition then
                     boxFocus = ref
                     drawUpdate = true
                     return
