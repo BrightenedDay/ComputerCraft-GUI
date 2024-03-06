@@ -1,10 +1,6 @@
 # ComputerCraft GUI
 
-[Installation]([#usage](https://raw.githubusercontent.com/BrightenedDay/ComputerCraft-GUI/master/gui.lua))
-
-# Wiki
-Tutorial and the gui functions can be found here in the wiki:
-
+[Installation](https://github.com/BrightenedDay/ComputerCraft-GUI/wiki))
 
 # Installation
 
