@@ -1,6 +1,6 @@
 # ComputerCraft GUI
 
-[Installation](https://github.com/BrightenedDay/ComputerCraft-GUI/wiki)
+[Wiki](https://github.com/BrightenedDay/ComputerCraft-GUI/wiki)
 
 # Installation
 
