@@ -11,6 +11,7 @@ local defaultTextColor = colors.black
 local defaultBGColor = colors.lightGray
 
 local menuSelected = nil
+local mSelIndex = 0
 local boxFocus = nil
 local objIncluded = false
 
@@ -41,6 +42,7 @@ function createMenu()
     local index = #menus + 1
     menus[index] = {}
     if not menuSelected then
+        mSelIndex = index
         menuSelected = menus[index]
     end
 
@@ -184,6 +186,7 @@ function createTextbox(menuIndex, length, BGColor, textColor, placeholder, place
 end
 
 function switch(menuIndex)
+    mSelIndex = menuIndex
     menuSelected = menus[menuIndex]
 end
 
@@ -396,6 +399,10 @@ function update()
     drawUI()
 end
 
+function isSelected(menuIndex)
+    return menuIndex == mSelIndex
+end
+
 function setBGColor(bgColor)
     defaultBGColor = bgColor
 end
@@ -428,4 +435,4 @@ function start()
     parallel.waitForAny(guiLoop, boxFocusLoop)
 end
 
-return {start=start, createMenu=createMenu, includeObj=includeObj, hasMenu=hasMenu, func=func, getObj=getObj, setVisible=setVisible, getVisible=getVisible, update=update, setBGColor=setBGColor, setTextColor=setTextColor, switch=switch, createPanel=createPanel, createPanelFromCenter=createPanelFromCenter, createLabel=createLabel, createButton=createButton, createButtonTxtCol=createButtonTxtCol, createTextbox=createTextbox}
+return {start=start, createMenu=createMenu, isSelected=isSelected, includeObj=includeObj, hasMenu=hasMenu, func=func, getObj=getObj, setVisible=setVisible, getVisible=getVisible, update=update, setBGColor=setBGColor, setTextColor=setTextColor, switch=switch, createPanel=createPanel, createPanelFromCenter=createPanelFromCenter, createLabel=createLabel, createButton=createButton, createButtonTxtCol=createButtonTxtCol, createTextbox=createTextbox}
