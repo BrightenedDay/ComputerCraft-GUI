@@ -53,7 +53,7 @@ function createMenu()
     end
 end
 
-function createButton(menuIndex, text, BGColor, pressedBGColor, func, posX, posY)
+function createButton(menuIndex, text, BGColor, pressedBGColor, func, border, posX, posY)
     local index = #menus[menuIndex] + 1
 
     menus[menuIndex][index] = {}
@@ -62,6 +62,7 @@ function createButton(menuIndex, text, BGColor, pressedBGColor, func, posX, posY
     menus[menuIndex][index].text = text
     menus[menuIndex][index].textColor = nil
     menus[menuIndex][index].visible = true
+    menus[menuIndex][index].border = border
     menus[menuIndex][index].BGColor = BGColor
     menus[menuIndex][index].pressedBGColor = pressedBGColor
     menus[menuIndex][index].pressed = false
@@ -77,7 +78,7 @@ function createButton(menuIndex, text, BGColor, pressedBGColor, func, posX, posY
     end
 end
 
-function createButtonTxtCol(menuIndex, text, textColor, BGColor, pressedBGColor, func, posX, posY)
+function createButtonTxtCol(menuIndex, text, textColor, BGColor, pressedBGColor, func, border, posX, posY)
     local index = #menus[menuIndex] + 1
 
     menus[menuIndex][index] = {}
@@ -86,6 +87,7 @@ function createButtonTxtCol(menuIndex, text, textColor, BGColor, pressedBGColor,
     menus[menuIndex][index].text = text
     menus[menuIndex][index].textColor = textColor
     menus[menuIndex][index].visible = true
+    menus[menuIndex][index].border = border
     menus[menuIndex][index].BGColor = BGColor
     menus[menuIndex][index].pressedBGColor = pressedBGColor
     menus[menuIndex][index].pressed = false
@@ -251,10 +253,10 @@ function drawUI()
                     term.setTextColor(defaultTextColor)
                 end
                 
-                if #ref.text % 2 == 0 then
-                    ref.endX = ref.posX + 2 + #ref.text
+                if ref.border then
+                    ref.endX = ref.posX + #ref.text + 1
                 else
-                    ref.endX = ref.posX + 1 + #ref.text
+                    ref.endX = ref.posX + #ref.text - 1
                 end
 
                 if ref.pressed then
@@ -265,7 +267,11 @@ function drawUI()
                 end
             
                 term.setCursorPos(ref.posX, ref.posY)
-                term.write(" "..ref.text.." ")
+                if ref.border then
+                    term.write(" "..ref.text.." ")
+                else
+                    term.write(ref.text)
+                end
                 
             elseif ref.is == 1 then
 
@@ -280,7 +286,8 @@ function drawUI()
 
             elseif ref.is == 3 then
 
-                ref.endX = ref.posX + 2
+                ref.endX = ref.posX + 1
+                
                 term.setBackgroundColor(ref.BGColor)
                 
                 if ref.border then
@@ -351,57 +358,43 @@ function clickedMouse(x, y)
         end
         
         if ref.is == 0 then
-            if #ref.text % 2 == 0 then
-                if x >= ref.posX and x < ref.endX and y == ref.posY then
-                    boxFocus = nil
-                    ref.pressed = true
-                    drawUI()
-                    sleep(0.2)
-                    if ref.func and ref.func ~= "" then
-                        callFunction(ref.func)
-                    end
-                    drawUpdate = true
-                    return
+
+            if x >= ref.posX and x <= ref.endX and y == ref.posY then
+                boxFocus = nil
+                ref.pressed = true
+                drawUI()
+                sleep(0.2)
+                if ref.func and ref.func ~= "" then
+                    callFunction(ref.func)
                 end
-            else
-                if x >= ref.posX - 1 and x < ref.endX and y == ref.posY then
-                    boxFocus = nil
-                    ref.pressed = true
-                    drawUI()
-                    sleep(0.2)
-                    if ref.func and ref.func ~= "" then
-                        callFunction(ref.func)
-                    end
-                    drawUpdate = true
-                    return
-                end
+                drawUpdate = true
+                return
             end
+
         elseif ref.is == 3 then
             local addition = 0
 
             if ref.border then
                 addition = 1
             end
-
-            if #ref.text % 2 == 0 then
-                if x >= ref.posX - 1 - ref.length / 2 and x < ref.endX + 1 + ref.length / 2 and y >= ref.posY - addition and y <= ref.posY + addition then
+            
+            if ref.length % 2 == 0 then
+                if x >= ref.posX - ref.length / 2 and x <= ref.endX + 1 + ref.length / 2 - 1 and y >= ref.posY - addition and y <= ref.posY + addition then
                     boxFocus = ref
                     drawUpdate = true
                     return
                 elseif boxFocus and boxFocus == ref then
                     boxFocus = nil
                     drawUpdate = true
-                    return
                 end
             else
-                if x >= ref.posX - ref.length / 2 and x < ref.endX + ref.length / 2 and y >= ref.posY - addition and y <= ref.posY + addition then
+                if x >= ref.posX - 1 - ref.length / 2 and x <= ref.endX + 1 + ref.length / 2 - 1 and y >= ref.posY - addition and y <= ref.posY + addition then
                     boxFocus = ref
                     drawUpdate = true
                     return
                 elseif boxFocus and boxFocus == ref then
                     boxFocus = nil
                     drawUpdate = true
-                    return
                 end
             end
         end
