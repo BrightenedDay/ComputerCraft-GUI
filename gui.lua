@@ -14,6 +14,8 @@ local menuSelected = nil
 local mSelIndex = 0
 local boxFocus = nil
 local objIncluded = false
+local FireEveryKey = false
+local callThis = nil
 
 function includeObj(include)
     objIncluded = include
@@ -36,6 +38,11 @@ function callFunction(name)
     end
 
     functions[name]()
+end
+
+function callEveryEvent(value, func)
+    callThis = func
+    FireEveryKey = value
 end
 
 function createMenu()
@@ -319,6 +326,10 @@ end
 function boxFocusLoop()
     while true do
         local e, key = os.pullEvent()
+
+        if e and (e == "key" or e == "mouse_click") and FireEveryKey and callThis and callThis ~= "" then
+            callFunction(callThis)
+        end
         
         if boxFocus then
             if #boxFocus.text < boxFocus.length then
@@ -333,7 +344,7 @@ function boxFocusLoop()
                         drawUI()
                     end
                 elseif e == "char" then
-                    boxFocus.text = boxFocus.text..string.lower(key)
+                    boxFocus.text = boxFocus.text..key
                     drawUI()
                 end
             else
@@ -441,4 +452,4 @@ function start()
     parallel.waitForAny(guiLoop, boxFocusLoop)
 end
 
-return {start=start, createMenu=createMenu, isSelected=isSelected, includeObj=includeObj, hasMenu=hasMenu, func=func, getObj=getObj, setVisible=setVisible, getVisible=getVisible, update=update, setBGColor=setBGColor, setTextColor=setTextColor, switch=switch, createPanel=createPanel, createPanelFromCenter=createPanelFromCenter, createLabel=createLabel, createButton=createButton, createButtonTxtCol=createButtonTxtCol, createTextbox=createTextbox}
+return {start=start, createMenu=createMenu, isSelected=isSelected, includeObj=includeObj, hasMenu=hasMenu, func=func, getObj=getObj, callEveryEvent=callEveryEvent, setVisible=setVisible, getVisible=getVisible, update=update, setBGColor=setBGColor, setTextColor=setTextColor, switch=switch, createPanel=createPanel, createPanelFromCenter=createPanelFromCenter, createLabel=createLabel, createButton=createButton, createButtonTxtCol=createButtonTxtCol, createTextbox=createTextbox}
