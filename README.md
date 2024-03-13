@@ -4,6 +4,8 @@ Tutorial and gui functions can be found here:
 
 [Wiki](https://github.com/BrightenedDay/ComputerCraft-GUI/wiki)
 
+![showcase](https://github.com/BrightenedDay/ComputerCraft-GUI/assets/97611394/7317b131-fd78-4a9f-bc72-34fcfefc3f23)
+
 # Installation
 
 Paste into computer.
