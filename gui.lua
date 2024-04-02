@@ -186,6 +186,7 @@ function createTextbox(menuIndex, length, BGColor, textColor, placeholder, place
     menus[menuIndex][index].BGColor = BGColor
     menus[menuIndex][index].posX = posX
     menus[menuIndex][index].posY = posY
+    menus[menuIndex][index].display = nil
     menus[menuIndex][index].endX = 0
 
     if objIncluded then
@@ -309,12 +310,22 @@ function drawUI()
                     term.setTextColor(ref.placeholderColor)
                     term.write(" "..ref.placeholder.." ")
                 else
-                    term.setTextColor(ref.textColor)
-                    term.write(" ")
-                    if boxFocus == ref then
-                        term.write(ref.text.."_")
+                    if ref.display ~= nil then
+                        term.setTextColor(ref.textColor)
+                        term.write(" ")
+                        if boxFocus == ref then
+                            term.write(ref.display.."_")
+                        else
+                            term.write(ref.display)
+                        end
                     else
-                        term.write(ref.text)
+                        term.setTextColor(ref.textColor)
+                        term.write(" ")
+                        if boxFocus == ref then
+                            term.write(ref.text.."_")
+                        else
+                            term.write(ref.text)
+                        end
                     end
                 end
                 
